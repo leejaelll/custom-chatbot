@@ -2,7 +2,7 @@ import { SignIn } from "@clerk/nextjs";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "FlowBrain - SignIn",
+  title: "FlowBrain - SignInPage",
 };
 
 export default function SignInPage() {
