@@ -7,15 +7,15 @@ import { UserButton } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { useState } from "react";
-import AddNoteDialog from "@/components/addNoteDialog";
+import AddEditNoteDialog from "@/components/AddEditNoteDialog";
 
 export default function NavBar() {
-  const [showAddNoteDialog, setShowAddNoteDialog] = useState(false);
+  const [showAddEditNoteDialog, setShowAddEditNoteDialog] = useState(false);
 
   return (
     <>
       <div className="p-4 shadow">
-        <div className="flex flex-wrap gap-3 items-center justify-between max-w-7xl mx-auto">
+        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3">
           <Link href={"/notes"} className="flex items-center gap-1">
             <Image src={logo} alt="FlowBrain logo" width={40} height={40} />
             <span className="font-bold">FlowBrain</span>
@@ -27,14 +27,17 @@ export default function NavBar() {
                 elements: { avatarBox: { width: "2.5rem", height: "2.5rem" } },
               }}
             />
-            <Button onClick={() => setShowAddNoteDialog(true)}>
+            <Button onClick={() => setShowAddEditNoteDialog(true)}>
               <Plus size={20} className="mr-2" />
               Add Note
             </Button>
           </div>
         </div>
       </div>
-      <AddNoteDialog open={showAddNoteDialog} setOpen={setShowAddNoteDialog} />
+      <AddEditNoteDialog
+        open={showAddEditNoteDialog}
+        setOpen={setShowAddEditNoteDialog}
+      />
     </>
   );
 }
