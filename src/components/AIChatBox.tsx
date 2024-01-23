@@ -1,9 +1,12 @@
 import { cn } from "@/lib/utils";
 import { useChat } from "ai/react";
-import { XCircle } from "lucide-react";
+import { Bot, XCircle } from "lucide-react";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { Message } from "ai";
+import { useUser } from "@clerk/nextjs";
+import Image from "next/image";
+import { useRef } from "react";
 
 interface AIChatBoxProps {
   open: boolean;
@@ -21,6 +24,9 @@ export default function AIChatBox({ open, onClose }: AIChatBoxProps) {
     error,
   } = useChat();
 
+  const inputRef = useRef<HTMLInputElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
+
   return (
     <div
       className={cn(
@@ -32,7 +38,7 @@ export default function AIChatBox({ open, onClose }: AIChatBoxProps) {
         <XCircle size={30} />
       </button>
       <div className="flex h-[600px] flex-col rounded border bg-background shadow-xl">
-        <div className="h-full">
+        <div className="mt-3 h-full overflow-y-auto px-3">
           {messages.map((message) => (
             <ChatMessage message={message} key={message.id} />
           ))}
@@ -51,10 +57,35 @@ export default function AIChatBox({ open, onClose }: AIChatBoxProps) {
 }
 
 function ChatMessage({ message: { role, content } }: { message: Message }) {
+  const { user } = useUser();
+
+  const isAIMessage = role === "assistant";
+
   return (
-    <div>
-      <div>{role}</div>
-      <div>{content}</div>
+    <div
+      className={cn(
+        "mb-3 flex items-center",
+        isAIMessage ? "me-5 justify-start" : "ms-5 justify-end",
+      )}
+    >
+      {isAIMessage && <Bot className="mr-2 shrink-0" />}
+      <p
+        className={cn(
+          "whitespace-pre-line rounded-md border px-3 py-2",
+          isAIMessage ? "bg-background" : "bg-primary text-primary-foreground",
+        )}
+      >
+        {content}
+      </p>
+      {!isAIMessage && user?.imageUrl && (
+        <Image
+          src={user.imageUrl}
+          alt="User Image"
+          height={100}
+          width={100}
+          className="ml-2 h-10 w-10 rounded-full object-cover"
+        />
+      )}
     </div>
   );
 }
