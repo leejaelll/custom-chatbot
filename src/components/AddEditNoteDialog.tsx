@@ -34,7 +34,7 @@ export default function AddEditNoteDialog({
   setOpen,
   noteToEdit,
 }: AddEditNoteProps) {
-  const [deleteInProgress, sestDeleteInProgress] = useState(false);
+  const [deleteInProgress, setDeleteInProgress] = useState(false);
   const router = useRouter();
 
   const form = useForm<CreateNoteSchema>({
@@ -45,6 +45,7 @@ export default function AddEditNoteDialog({
     },
   });
 
+  /*----------------------------------------------------------------------------------*/
   async function onSubmit(input: CreateNoteSchema) {
     try {
       if (noteToEdit) {
@@ -70,13 +71,13 @@ export default function AddEditNoteDialog({
       setOpen(false);
     } catch (error) {
       console.error(error);
-      alert("Somethig went wrong");
+      alert("Something went wrong");
     }
   }
-
+  /*----------------------------------------------------------------------------------*/
   async function deleteNote() {
     if (!noteToEdit) return;
-    sestDeleteInProgress(true);
+    setDeleteInProgress(true);
     try {
       const response = await fetch("/api/notes", {
         method: "DELETE",
@@ -90,16 +91,19 @@ export default function AddEditNoteDialog({
       console.error(error);
       alert("Something is worng");
     } finally {
-      sestDeleteInProgress(false);
+      setDeleteInProgress(false);
     }
   }
 
+  /*----------------------------------------------------------------------------------*/
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent>
+        {/* Header */}
         <DialogHeader>
           <DialogTitle>{noteToEdit ? "Edit Note" : "Add Note"}</DialogTitle>
         </DialogHeader>
+        {/* Form Content */}
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
             <FormField
@@ -132,8 +136,8 @@ export default function AddEditNoteDialog({
               {noteToEdit && (
                 <LoadingButton
                   variant="destructive"
-                  loading={form.formState.isSubmitting}
-                  disabled={deleteInProgress}
+                  loading={deleteInProgress}
+                  disabled={form.formState.isSubmitting}
                   onClick={deleteNote}
                   type="button"
                 >

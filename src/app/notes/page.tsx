@@ -21,9 +21,7 @@ export default async function NotesPage() {
       ))}
 
       {allNotes.length === 0 && (
-        <div className="col-span-full text-center">
-          You don&apost have any notes yet
-        </div>
+        <div className="col-span-full text-center">{"NO DATA :("}</div>
       )}
     </div>
   );
