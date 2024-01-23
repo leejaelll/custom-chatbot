@@ -36,7 +36,6 @@ export default function AddEditNoteDialog({
 }: AddEditNoteProps) {
   const [deleteInProgress, setDeleteInProgress] = useState(false);
   const router = useRouter();
-
   const form = useForm<CreateNoteSchema>({
     resolver: zodResolver(createNoteSchema),
     defaultValues: {
